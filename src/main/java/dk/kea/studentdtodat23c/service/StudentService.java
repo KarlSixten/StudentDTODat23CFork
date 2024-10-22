@@ -60,7 +60,7 @@ public class StudentService {
                 studentRequestDTO.name(),
                 studentRequestDTO.password(),
                 studentRequestDTO.bornDate(),
-                studentRequestDTO.borntime());
+                studentRequestDTO.bornTime());
 
         Student studentResponse = studentRepository.save(newStudent);
 
@@ -71,7 +71,7 @@ public class StudentService {
                 newStudent.getBornTime());
     }
 
-    public Student updateStudent(Long id, Student studentRequest) {
+    public StudentResponseDTO updateStudent(Long id, StudentRequestDTO studentRequestDTO) {
         Optional<Student> optionalStudent = studentRepository.findById(id);
         // Throw RuntimeException if student is not found
         if (optionalStudent.isEmpty()) {
@@ -80,13 +80,18 @@ public class StudentService {
 
         Student student = optionalStudent.get();
 
-        student.setName(studentRequest.getName());
-        student.setPassword(studentRequest.getPassword());
-        student.setBornDate(studentRequest.getBornDate());
-        student.setBornTime(studentRequest.getBornTime());
+        student.setName(studentRequestDTO.name());
+        student.setPassword(studentRequestDTO.password());
+        student.setBornDate(studentRequestDTO.bornDate());
+        student.setBornTime(studentRequestDTO.bornTime());
 
         Student studentResponse = studentRepository.save(student);
-        return studentResponse;
+        return new StudentResponseDTO(
+                studentResponse.getId(),
+                studentResponse.getName(),
+                studentResponse.getBornDate(),
+                studentResponse.getBornTime()
+        );
     }
 
     public void deleteStudent(Long id) {
